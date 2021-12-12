@@ -13,7 +13,7 @@ const SearchForm = () => {
 
     return (
         <form className='search-form' onSubmit={handleSubmit}>
-                <input name="input-search" className={`search-form__text-input`} type="text" value={searchText} placeholder="Search for any IP address (put IP before address) or domain" onChange={e => setSearchText(e.target.value)}></input>
+                <input name="input-search" className={`search-form__text-input`} type="text" value={searchText} placeholder="Search for any IP address, mail or domain" onChange={e => setSearchText(e.target.value)}></input>
                 <input className="search-form__btn" type="submit" />
         </form>
     )
