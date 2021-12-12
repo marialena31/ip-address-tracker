@@ -4,11 +4,11 @@ import { SearchContext } from '../../pages/homepage/homepage.component'
 import './search-form.styles.scss'
 
 const SearchForm = () => {
-    const [setSearchValue] = React.useContext(SearchContext)
+    const context = React.useContext(SearchContext)
     const [searchText, setSearchText] = React.useState('')
     const handleSubmit = event => {
         event.preventDefault();
-        setSearchValue(searchText)
+        context[1](searchText)
     }
 
     return (
