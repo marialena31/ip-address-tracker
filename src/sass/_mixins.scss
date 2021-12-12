@@ -1,0 +1,50 @@
+// MEDIA QUERY MANAGER
+/* 
+0 - 600px : Phone (ref : 375px)
+600 - 900px: Tablet portrait (ref : 768px)
+900 - 1200px : Tablet landscape
+[1200 - 1800] is where our normal syles apply
+1800px + : Big desktop
+*/
+
+// @mixin respond-phone {
+//   @media (max-width: 600px) { @content };
+// }
+
+/* $breakpoint arguement choices:
+- phone
+- tab-port
+- tab-land 
+- big-desktop
+
+ORDER: Base + typography > general layout + grid > pge layout > components
+
+1em = 16px
+only screen is to avoid media queries are applied in case of printing for example
+*/
+@mixin respond($breakpoint) {
+    @if $breakpoint == phone {
+      @media only screen and (max-width: 37.5em) {
+        // 600px
+        @content;
+      }
+    }
+    @if $breakpoint == tab-port {
+      @media only screen and (max-width: 56.25em) {
+        // 900px
+        @content;
+      }
+    }
+    @if $breakpoint == tab-land {
+      @media only screen and (max-width: 75em) {
+        // 1200px
+        @content;
+      }
+    }
+    @if $breakpoint == big-desktop {
+      @media only screen and (min-width: 112.5em) {
+        // 1800px
+        @content;
+      }
+    }
+  }
