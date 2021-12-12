@@ -8,13 +8,13 @@ import './api.styles.scss'
 const apiKey = 'at_qFM0HXjTjEnGQOvmlxW4qk2bXkYF6'
 
 const Api = () => {
-    const [searchValue, setSearchValue] = React.useContext(SearchContext)
+    const [searchValue] = React.useContext(SearchContext)
     const [error, setError] = React.useState(null);
     const [isLoaded, setIsLoaded] = React.useState(false);
     const [data, setData] = React.useState(null);
-    let query = 'ipAddress';
 
     React.useEffect(() => {
+        let query = 'ipAddress';
         if (!searchValue) {
             return
         }
