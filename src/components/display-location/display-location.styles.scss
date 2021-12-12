@@ -1,4 +1,4 @@
-@import '../../sass/variables';
+@import '../../sass/main';
 
 .display-location {
   width: 111rem;
@@ -14,6 +14,16 @@
   vertical-align: top;
   z-index: 50;
 
+  @include respond(tab-land) {
+    width: 100vw;
+    margin-left: 2.4rem;
+    margin-right: 2.4rem;
+    padding-right: 0;
+    padding-left: 0;
+    flex-direction: column;
+    text-align: center;
+  }
+
   &__box {
     position: relative;
     margin-left: 3.2rem;
@@ -21,8 +31,21 @@
     width: 24.5rem;
     min-height: 75px;
 
+    @include respond(tab-land) {
+      margin-left: 0;
+      margin-right: 0;
+      padding-right: 0;
+      padding-left: 0;
+      width: auto;
+      min-height: auto;
+    }
+
     &:not(:last-child) {
       border-right: 1px solid rgba(0, 0, 0, 0.15);
+
+      @include respond(tab-land) {
+        border-right: none;
+      }
     }
 
     &__label {
