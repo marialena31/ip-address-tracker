@@ -1,4 +1,4 @@
-@import '../../sass/variables';
+@import '../../sass/main';
 
 .search-form {
   width: 58.8rem;
@@ -7,6 +7,12 @@
   display: flex;
   align-items: center;
 
+  @include respond(phone) {
+    width: 95vw;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   &__text-input {
     width: 49.7rem;
     height: 58px;
@@ -14,6 +20,10 @@
     border: none;
     border-radius: 15px 0 0 15px;
     padding-left: 2.4rem;
+
+    @include respond(phone) {
+      width: 100vw;
+    }
 
     &:focus {
       outline: none;

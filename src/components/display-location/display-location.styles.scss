@@ -15,11 +15,7 @@
   z-index: 50;
 
   @include respond(tab-land) {
-    width: 100vw;
-    margin-left: 2.4rem;
-    margin-right: 2.4rem;
-    padding-right: 0;
-    padding-left: 0;
+    width: 95vw;
     flex-direction: column;
     text-align: center;
   }
@@ -32,10 +28,6 @@
     min-height: 75px;
 
     @include respond(tab-land) {
-      margin-left: 0;
-      margin-right: 0;
-      padding-right: 0;
-      padding-left: 0;
       width: auto;
       min-height: auto;
     }
