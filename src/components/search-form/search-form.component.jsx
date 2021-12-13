@@ -18,7 +18,7 @@ const SearchForm = () => {
         <ErrorBoundary key={value} FallbackComponent={ErrorDisplay}>
             <div className='search-form' >
                 <input ref={inputRef} name="input-search" className={`search-form__text-input`} type="text" value={value} placeholder="Search for any IP address, mail or domain" onChange={e => setValue(e.target.value)}></input>
-                <input className="search-form__btn" type="submit" onClick={() => setSearchValue(value)}/>
+                <input className="search-form__btn" type="submit" value=""  onClick={() => setSearchValue(value)}/>
             </div>
         </ErrorBoundary>
     )
