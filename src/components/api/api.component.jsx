@@ -6,7 +6,7 @@ import ErrorDisplay from "../error-display/error-display.component";
 import { SearchContext } from '../../pages/homepage/homepage.component'
 import './api.styles.scss'
 
-const geoipifyApiKey = 'at_qFM0HXjTjEnGQOvmlxW4qk2bXkYF6'
+const geoipifyApiKey = 'at_ZTsSILvFUvs89LLRtIyZzcJpOE14b'
 
 const myHeader = new Headers({
     'Content-Type': 'application/x-www-form-urlencoded',
