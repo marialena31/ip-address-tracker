@@ -11,7 +11,7 @@ const DisplayLocation = ({data}) => {
             </div>
             <div className="display-location__box">
                 <div className="display-location__box__label">Location</div>
-                <div className="display-location__box__value">{data ? data.location.region : ''},{data ? data.location.city : ''},{data ? data.location.postalCode : ''}</div>
+                <div className="display-location__box__value">{data ? data.location.region : ''}, {data ? data.location.city : ''}, {data ? data.location.postalCode : ''}</div>
             </div>
             <div className="display-location__box">
                 <div className="display-location__box__label">Timezone</div>
