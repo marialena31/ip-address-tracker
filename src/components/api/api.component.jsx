@@ -17,6 +17,35 @@ const init = {
     mode: 'cors',
 }
 
+const SearchCacheContext = React.createContext()
+
+const searchCacheReducer = (state, action) => {
+    const ttl = 1_000 * 10
+    const expire = Date.now() * ttl
+    switch (action.type) {
+        case 'ADD_SEARCH_IP': return {...state, [action.search]: {data: action.data, expire}}
+
+        case 'ADD_SEARCH_MAIL': return {...state, [action.search]: {data: action.data, expire}}
+
+        case 'ADD_SEARCH_DOMAIN': return {...state, [action.search]: {data: action.data, expire}}
+
+        default: throw new Error(`impossible action type: ${action.type}`)
+    }
+}
+
+const SearchCacheProvider = props => {
+    const [cache, dispatch] = React.useReducer(searchCacheReducer,{})
+    return <SearchCacheContext.Provider value={[cache, dispatch]} {...props} />
+}
+
+const useSearchCache = () => {
+    const context = React.useContext(SearchCacheContext)
+    if(!context) {
+        throw new Error('useSearchCache must be used with SearchCacheProvider')
+    }
+    return context
+}
+
 const reducer = (state, action) => {
     switch (action.type) {
         case 'fetching':
@@ -41,29 +70,52 @@ const useFetchData = () => {
 
     const execute = React.useCallback(promise => {
         dispatch({type: 'fetching'})
-
         promise
             .then(search => dispatch({type: 'done', payload: search}))
             .catch(error => dispatch({type: 'fail', error}))
     }, [])
 
-    return {data, error, status, execute}
+    const setData = React.useCallback(
+        data => dispatch({type: 'done', payload: data}),
+        [dispatch],
+    )
+
+    return {data, error, status, execute, setData}
 }
 
 const useFindSearchLocation = search => {
-    const {data, error, status, execute} = useFetchData()
+    const [cache, dispatch] = useSearchCache()
+
+    React.useDebugValue(cache)
+
+    const {data, error, status, execute, setData} = useFetchData()
     React.useEffect(() => {
         if (!search) {
             return
-        }
-        if((search.split(".").length - 1) === 3)  {
-            execute(fetchIpAddress(search))
+        } else if (
+            cache[search]?.data &&
+            Date.now() < cache[search].expire
+        ) {
+            setData(cache[search].data)
+        } else if((search.split(".").length - 1) === 3)  {
+            execute(
+                fetchIpAddress(search).then(data => {
+                    dispatch({type: 'ADD_SEARCH_IP', search, data})
+                    return data
+                }),
+            )
         } else if(search.includes('@')) {
-            execute(fetchMail(search))
+            execute(fetchMail(search).then(data => {
+                dispatch({type: 'ADD_SEARCH_MAIL', search, data})
+                return data
+            }),)
         } else {
-            execute(fetchDomain(search))
+            execute(fetchDomain(search).then(data => {
+                dispatch({type: 'ADD_SEARCH_DOMAIN', search, data})
+                return data
+            }),)
         }
-    }, [search, execute])
+    }, [search, execute, cache, setData, dispatch])
     return {data, error, status}
 }
 
@@ -107,7 +159,6 @@ const fetchDomain = domain => {
 
 const fetchMail = mail => {
     const url = `https://geo.ipify.org/api/v2/country,city?apiKey=${geoipifyApiKey}&mail=${mail}`;
-    console.log(url)
     return fetch(url, init)
         .then(response => response.json())
         .then(json => {
@@ -125,9 +176,7 @@ const fetchMail = mail => {
         }) // ERROR APPEL API
 }
 
-
-const Api = () => {
-    const [searchValue] = React.useContext(SearchContext)
+const Display = ({searchValue}) => {
     const state = useFindSearchLocation(searchValue)
     const {data, error, status} = state
 
@@ -139,12 +188,23 @@ const Api = () => {
         return 'Loading ...'
     } else if (status === 'done') {
         return (
-            <ErrorBoundary key={searchValue} FallbackComponent={ErrorDisplay}>
+            <>
                 <DisplayLocation data={data}/>
                 <CustomMap data={data}/>
-            </ErrorBoundary>
+            </>
         )
     }
+}
+
+const Api = () => {
+    const [searchValue] = React.useContext(SearchContext)
+    return (
+        <SearchCacheProvider>
+            <ErrorBoundary key={searchValue} FallbackComponent={ErrorDisplay}>
+               <Display searchValue={searchValue}/>
+            </ErrorBoundary>
+        </SearchCacheProvider>
+    )
 }
 
 export default Api;
