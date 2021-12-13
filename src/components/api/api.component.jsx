@@ -185,12 +185,12 @@ const Display = ({searchValue}) => {
     } else if (status === 'idle') {
         return ''
     }else if (status === 'fetching') {
-        return 'Loading ...'
+        return <CustomMap data={data} spinner={true}/>
     } else if (status === 'done') {
         return (
             <>
                 <DisplayLocation data={data}/>
-                <CustomMap data={data}/>
+                <CustomMap data={data} spinner={false}/>
             </>
         )
     }
