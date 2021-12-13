@@ -124,6 +124,11 @@ const fetchIpAddress = ipAddress => {
     return fetch(url, init)
         .then(response => response.json())
         .then(json => {
+            if(json.code) {
+                return Promise.reject(
+                    new Error(`"${json.code} : ${json.messages}"`),
+                )
+            }
             return json
         })
         .catch(error => {
@@ -143,6 +148,11 @@ const fetchDomain = domain => {
     return fetch(url, init)
         .then(response => response.json())
         .then(json => {
+            if(json.code) {
+                return Promise.reject(
+                    new Error(`"${json.code} : ${json.messages}"`),
+                )
+            }
             return json
         })
         .catch(error => {
@@ -157,21 +167,26 @@ const fetchDomain = domain => {
         }) // ERROR APPEL API
 }
 
-const fetchMail = mail => {
-    const url = `https://geo.ipify.org/api/v2/country,city?apiKey=${geoipifyApiKey}&mail=${mail}`;
+const fetchMail = email => {
+    const url = `https://geo.ipify.org/api/v2/country,city?apiKey=${geoipifyApiKey}&email=${email}`;
     return fetch(url, init)
         .then(response => response.json())
         .then(json => {
-                return json
+            if(json.code) {
+                return Promise.reject(
+                    new Error(`"${json.code} : ${json.messages}"`),
+                )
+            }
+            return json
         })
         .catch(error => {
             return Promise.reject(
-                new Error(`No location found for mail "${mail}"`),
+                new Error(`No location found for mail "${email}"`),
             )
         }) // ERROR DU JSON()
         .catch(error => {
             return Promise.reject(
-                new Error(`No location found for mail "${mail}"`),
+                new Error(`No location found for mail "${email}"`),
             )
         }) // ERROR APPEL API
 }
